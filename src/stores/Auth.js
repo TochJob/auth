@@ -1,4 +1,3 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import apiConfig from '../apiConfig/api.config'
 import axios from 'axios'

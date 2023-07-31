@@ -12,8 +12,10 @@ import Cards from "../components/GameCards/Cards.vue"
 <style lang="scss" scoped>
 .main {
   display: flex;
+  align-items: flex-start;
   padding: 20px;
   background: #2d2d2d;
+  gap: 20px;
 
   &__sidebar {
     width: 20%;

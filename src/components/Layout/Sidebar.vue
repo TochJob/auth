@@ -1,15 +1,21 @@
 <script setup>
 import { ref } from 'vue'
+const name = ref('')
+const balance = ref('')
+
+function getBalance() {
+  
+}
 </script>
 <template>
   <section class="sidebar">
     <div class="sidebar__wrapper">
       <div class="sidebar__image">
-        <img src="@/assets/images/EmptyUser.svg" alt="profile" class="sidebar__image-icon">
+        <img src="@/assets/images/EmptyUser.svg" alt="profile" class="sidebar__image-icon" />
       </div>
       <div class="sidebar__user">
         <h2 class="sidebar__user-name">Пуков Е.</h2>
-        <h3 class="sidebar__user-balance">Баланс: 12312 ₽</h3>
+        <h3 class="sidebar__user-balance">Баланс: 11 €</h3>
       </div>
     </div>
   </section>
@@ -42,7 +48,7 @@ import { ref } from 'vue'
   &__user {
     display: flex;
     flex-direction: column;
-    
+
     &-name {
       font-weight: 700;
       color: #ececec;

@@ -1,30 +1,42 @@
 <script setup>
-import { ref } from 'vue'
-import CardItem from './CardItem.vue';
+import { onBeforeMount } from 'vue'
+import CardItem from './CardItem.vue'
+import { useGamesStore } from '../../stores/Cards'
+import { storeToRefs } from 'pinia'
 
-const game = [
-  {
-    image: '',
-    title: 'Game1',
-    id: 1
-  }, {
-    image: '',
-    title: 'Game2',
-    id: 1
-  }, {
-    image: '',
-    title: 'Game3',
-    id: 1
-  }, {
-    image: '',
-    title: 'Game14',
-    id: 1
-  }
-]
+const GameStore = useGamesStore()
+const games = storeToRefs(GameStore)
+
+onBeforeMount(async () => {
+  await GameStore.getGames()
+})
+
+function chooseGame(id) {
+  GameStore.getGameLink(id)
+}
 </script>
 <template>
   <section class="cards">
-    <CardItem />
+    <CardItem
+      v-if="games.games.value.length"
+      class="cards__item"
+      :game="item"
+      v-for="(item, index) of games.games.value"
+      :key="item.id"
+      @chooseGame="chooseGame"
+    />
   </section>
 </template>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.cards {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 20px;
+  flex-wrap: wrap;
+  &__item {
+    flex-basis: 30%;
+  }
+}
+</style>

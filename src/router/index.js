@@ -8,6 +8,9 @@ const router = createRouter({
     {
       path: '/',
       name: 'main',
+      meta: {
+        requiresAuth: true
+      },
       component: () => import('../views/Main.vue')
     },
     {
@@ -19,41 +22,47 @@ const router = createRouter({
 })
 
 /**
- * Предотвращение несанкционированного доступа
+ * Предотвращение несанкционированного доступа.
+ * 
+ * При необходимости, можно закоммитить и пустит в основное приложение 
  */
 
-axios.interceptors.response.use(
-  (response) => {
-    next()
-    return response
-  },
-  async (err) => {
-    const authStore = useAuthStore()
-    console.log('authStore', authStore.tokens.token)
+// router.beforeEach((to, from, next) => {
+//   const AuthStore = useAuthStore()
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     if (AuthStore.requiresAuth) {
+//       next()
+//       return
+//     }
+//     next('/login')
+//   } else {
+//     next()
+//   }
+// })
 
-    if (err.config.url.indexOf('account/token/refresh/') !== -1) {
-      store.dispatch('logout')
-      next('/login')
-      return
-    }
+/**
+ * Обработчик просрочки токена и обновление refresh-token
+ */
 
-    if (err.response.status === 401) {
-      const refresh = localStorage.getItem('refreshToken')
-      return await store
-        .dispatch('refreshToken', { refresh: refresh })
-        .then((res) => {
-          err.config.headers.Authorization = `JWT ${res.data.access}`
-          localStorage.setItem('token', res.data.access)
-          localStorage.setItem('refreshToken', res.data.refresh)
-          axios.request(err.config)
-          location.reload()
-          return res
-        })
-        .catch((err) => err)
-    }
+axios.interceptors.response.use(undefined, async (err) => {
+  const authStore = useAuthStore()
+  console.log('authStore', authStore.tokens.token)
 
-    throw err
+  if (err.response.status === 401) {
+    const refresh = localStorage.getItem('refreshToken')
+    return await store
+      .dispatch('refreshToken', { refresh: refresh })
+      .then((res) => {
+        localStorage.setItem('token', res.data.access)
+        localStorage.setItem('refreshToken', res.data.refresh)
+        axios.request(err.config)
+        location.reload()
+        return res
+      })
+      .catch((err) => err)
   }
-)
+
+  throw err
+})
 
 export default router
