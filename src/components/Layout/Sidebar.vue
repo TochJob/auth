@@ -1,11 +1,21 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/stores/User'
+
+const UserStore = useUserStore()
 const name = ref('')
-const balance = ref('')
+const balance = storeToRefs(UserStore)
 
 function getBalance() {
-  
+  UserStore.getUserBalance()
+  console.log(1)
 }
+
+onMounted(() => {
+  getBalance()
+})
+setInterval(getBalance, 30000)
 </script>
 <template>
   <section class="sidebar">
@@ -14,8 +24,8 @@ function getBalance() {
         <img src="@/assets/images/EmptyUser.svg" alt="profile" class="sidebar__image-icon" />
       </div>
       <div class="sidebar__user">
-        <h2 class="sidebar__user-name">Пуков Е.</h2>
-        <h3 class="sidebar__user-balance">Баланс: 11 €</h3>
+        <h2 class="sidebar__user-name">Def. Def.</h2>
+        <h3 class="sidebar__user-balance">Balance: {{ balance.balance }} €</h3>
       </div>
     </div>
   </section>

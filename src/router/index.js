@@ -23,8 +23,8 @@ const router = createRouter({
 
 /**
  * Предотвращение несанкционированного доступа.
- * 
- * При необходимости, можно закоммитить и пустит в основное приложение 
+ *
+ * При необходимости, можно закоммитить и пустит в основное приложение
  */
 
 // router.beforeEach((to, from, next) => {
@@ -46,20 +46,18 @@ const router = createRouter({
 
 axios.interceptors.response.use(undefined, async (err) => {
   const authStore = useAuthStore()
-  console.log('authStore', authStore.tokens.token)
-
   if (err.response.status === 401) {
     const refresh = localStorage.getItem('refreshToken')
-    return await store
-      .dispatch('refreshToken', { refresh: refresh })
-      .then((res) => {
-        localStorage.setItem('token', res.data.access)
-        localStorage.setItem('refreshToken', res.data.refresh)
-        axios.request(err.config)
-        location.reload()
-        return res
-      })
-      .catch((err) => err)
+    try {
+      const response = await authStore.refreshToken()
+      localStorage.setItem('token', response.data.access)
+      localStorage.setItem('refreshToken', response.data.refresh)
+      axios.request(err.config)
+      location.reload()
+      return response
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   throw err

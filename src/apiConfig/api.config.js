@@ -5,7 +5,7 @@ export default {
    * Login api
    */
   apiAuthLogin: `${API}v2/login`,
-  apiRefreshTokens: `${API}auth/token?clientId=default`,
+  apirefreshToken: `${API}auth/token?clientId=default`,
 
   /**
    * User's data

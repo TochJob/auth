@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import apiConfig from '../apiConfig/api.config'
 import axios from 'axios'
 
-const { apiAuthLogin, apiRefreshTokens } = apiConfig
+const { apiAuthLogin, apirefreshToken } = apiConfig
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -27,14 +27,15 @@ export const useAuthStore = defineStore('auth', {
         console.log(error)
       }
     },
-    async refreshTokens() {
+    async refreshToken() {
       const refreshToken = localStorage.getItem('refreshToken')
       if (!refreshToken) {
         this.logout()
       }
       try {
-        const response = await axios.post(apiRefreshTokens, refreshToken)
+        const response = await axios.post(apirefreshToken, refreshToken)
         this.authorizationTokens(response.token, response[refresh - token])
+        return response.data
       } catch (error) {
         console.log(error)
       }
