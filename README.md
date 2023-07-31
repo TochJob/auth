@@ -1,6 +1,10 @@
+The project has two pages. Log in and main page. For every page is used  separate store. All navigation in router. There is also control of tokens and access.
+
 # AuthTest
 
 This template should help get you started developing with Vue 3 in Vite.
+
+
 
 ## Recommended IDE Setup
 
@@ -33,3 +37,4 @@ npm run build
 ```sh
 npm run lint
 ```
+

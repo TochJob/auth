@@ -1,7 +1,6 @@
 <script setup>
-import Sidebar from '../components/Layout/Sidebar.vue';
-import Cards from "../components/GameCards/Cards.vue"
-
+import Sidebar from '../components/Layout/Sidebar.vue'
+import Cards from '../components/GameCards/Cards.vue'
 </script>
 <template>
   <section class="main">
@@ -19,6 +18,7 @@ import Cards from "../components/GameCards/Cards.vue"
 
   &__sidebar {
     width: 20%;
+    position: sticky;
   }
 }
 </style>
