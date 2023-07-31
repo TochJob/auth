@@ -14,7 +14,6 @@ export const useUserStore = defineStore('user', {
       try {
         const response = await axios.get(`${apiGetUserBalance}&auth=${token}`)
         this.balance = response.data
-        console.log(this.balance)
       } catch (error) {
         console.log(error)
       }

@@ -27,18 +27,18 @@ const router = createRouter({
  * При необходимости, можно закоммитить и пустит в основное приложение
  */
 
-// router.beforeEach((to, from, next) => {
-//   const AuthStore = useAuthStore()
-//   if (to.matched.some((record) => record.meta.requiresAuth)) {
-//     if (AuthStore.requiresAuth) {
-//       next()
-//       return
-//     }
-//     next('/login')
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  const AuthStore = useAuthStore()
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (AuthStore.requiresAuth) {
+      next()
+      return
+    }
+    next('/login')
+  } else {
+    next()
+  }
+})
 
 /**
  * Обработчик просрочки токена и обновление refresh-token
