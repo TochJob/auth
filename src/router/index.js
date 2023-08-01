@@ -30,7 +30,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const AuthStore = useAuthStore()
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (AuthStore.requiresAuth) {
+    console.log('AuthStore.isUserAuth', AuthStore.isUserAuth)
+    if (localStorage.getItem('token')) {
       next()
       return
     }

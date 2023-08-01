@@ -18,12 +18,13 @@ export const useAuthStore = defineStore('auth', {
       try {
         this.auth_request()
         const response = await axios.post(apiAuthLogin, data)
-        this.authorizationTokens(response.token, response[refresh - token])
+        const tokens = response.data.data[0].attributes
+        console.log('tokens',tokens);
+        this.authorizationTokens(tokens.token, tokens['refresh-token'])
+        return true
       } catch (error) {
         this.auth_error()
-        localStorage.removeItem('token')
-        localStorage.removeItem('refreshToken')
-
+        this.logout()
         console.log(error)
       }
     },
@@ -41,18 +42,18 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     authorizationTokens(token, refresh) {
-      this.tokens.token = response.token
-      this.tokens.refresh = response[refresh - token]
-      console.log(response)
-      this.auth_success({ token: this.tokens.token, refresh: this.tokens.refresh })
+      this.auth_success({ token: token, refresh: refresh })
     },
     auth_request() {
       this.status = 'loading'
     },
     auth_success(payload) {
       this.status = 'success'
+      localStorage.setItem('token', payload.token)
+      localStorage.setItem('refresh', payload.refresh)
       this.tokens.token = payload.token
       this.tokens.refresh = payload.refresh
+      this.isUserAuth = true
     },
     auth_error() {
       this.status = 'error'
@@ -61,6 +62,9 @@ export const useAuthStore = defineStore('auth', {
       this.status = ''
       this.tokens.token = ''
       this.tokens.refresh = ''
+      localStorage.removeItem('token')
+      localStorage.removeItem('refreshToken')
+      this.isUserAuth = false
     }
   }
 })

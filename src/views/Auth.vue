@@ -3,8 +3,10 @@ import { ref } from 'vue'
 import { useAuthStore } from '@/stores/Auth'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/yup'
+import { useRouter } from 'vue-router'
 import * as yup from 'yup'
 
+const router = useRouter()
 const authStore = useAuthStore()
 const { errors, defineInputBinds } = useForm({
   validationSchema: toTypedSchema(
@@ -28,15 +30,20 @@ const inputsArray = ref([
   }
 ])
 
-function submitLogin() {
-  console.log()
+async function submitLogin() {
   if (!Object.keys(errors.value).length) {
     const data = {
       clientId: 'default',
-      login: inputsArray.value[0].value,
-      password: inputsArray.value[1].value
+      login: inputsArray.value[0].value.value,
+      password: inputsArray.value[1].value.value
     }
-    authStore.loginUser(data)
+    const response = await authStore.loginUser(data)
+    if (response) {
+      console.log(123, router)
+      router.push({
+        name: 'main'
+      })
+    }
   }
 }
 </script>
