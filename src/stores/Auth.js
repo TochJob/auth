@@ -28,8 +28,7 @@ export const useAuthStore = defineStore('auth', {
         console.log(error)
       }
     },
-    async refreshToken() {
-      const refreshToken = localStorage.getItem('refreshToken')
+    async refreshToken(refreshToken) {
       if (!refreshToken) {
         this.logout()
       }

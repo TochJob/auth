@@ -50,7 +50,7 @@ axios.interceptors.response.use(undefined, async (err) => {
   if (err.response.status === 401) {
     const refresh = localStorage.getItem('refreshToken')
     try {
-      const response = await authStore.refreshToken()
+      const response = await authStore.refreshToken(refresh)
       localStorage.setItem('token', response.data.access)
       localStorage.setItem('refreshToken', response.data.refresh)
       axios.request(err.config)
