@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useRouter } from 'vue-router';
 import apiConfig from '../apiConfig/api.config'
 import axios from 'axios'
 
@@ -19,7 +20,7 @@ export const useAuthStore = defineStore('auth', {
         this.auth_request()
         const response = await axios.post(apiAuthLogin, data)
         const tokens = response.data.data[0].attributes
-        console.log('tokens',tokens);
+        console.log('tokens', tokens)
         this.authorizationTokens(tokens.token, tokens['refresh-token'])
         return true
       } catch (error) {
@@ -29,14 +30,18 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async refreshToken(refreshToken) {
-      if (!refreshToken) {
-        this.logout()
-      }
+      console.log('refreshToken', refreshToken)
       try {
-        const response = await axios.post(apirefreshToken, refreshToken)
-        this.authorizationTokens(response.token, response[refresh - token])
+        const response = await axios.post(apirefreshToken, {
+          clientId: 'default',
+          refreshToken: refreshToken
+        })
+        const tokens = response.data
+
+        this.authorizationTokens(tokens.token, tokens['refresh-token'])
         return response.data
       } catch (error) {
+        this.logout()
         console.log(error)
       }
     },
@@ -49,7 +54,7 @@ export const useAuthStore = defineStore('auth', {
     auth_success(payload) {
       this.status = 'success'
       localStorage.setItem('token', payload.token)
-      localStorage.setItem('refresh', payload.refresh)
+      localStorage.setItem('refreshToken', payload.refresh)
       this.tokens.token = payload.token
       this.tokens.refresh = payload.refresh
       this.isUserAuth = true
@@ -64,6 +69,10 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('token')
       localStorage.removeItem('refreshToken')
       this.isUserAuth = false
+      window.location.href = ''
+      const router = useRouter();
+      console.log(router);
+      router.push({ name: 'login' });
     }
   }
 })

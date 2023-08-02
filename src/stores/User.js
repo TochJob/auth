@@ -11,10 +11,11 @@ export const useUserStore = defineStore('user', {
   actions: {
     async getUserBalance() {
       const token = localStorage.getItem('token')
+      console.log('getUserBalance', localStorage)
+      console.log(token)
       try {
         const response = await axios.get(`${apiGetUserBalance}&auth=${token}`)
         this.balance = response.data.data
-        console.log('this.balance', this.balance.data)
       } catch (error) {
         console.log(error)
       }

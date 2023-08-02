@@ -57,6 +57,7 @@ axios.interceptors.response.use(undefined, async (err) => {
       location.reload()
       return response
     } catch (error) {
+
       console.log(error)
     }
   }

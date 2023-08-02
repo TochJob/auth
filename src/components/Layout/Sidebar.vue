@@ -11,7 +11,6 @@ const balance = storeToRefs(UserStore)
 
 function getBalance() {
   UserStore.getUserBalance()
-  console.log('balance.data', balance.value)
 }
 
 onMounted(() => {
